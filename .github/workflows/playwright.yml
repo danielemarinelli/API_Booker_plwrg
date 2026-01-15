@@ -2,9 +2,9 @@ name: Playwright E2E Tests
 
 on:
   push:
-    branches: [ main, masterr ]
+    branches: [ mainn, masterr ]
   pull_request:
-    branches: [ main, masterr ]
+    branches: [ mainn, masterr ]
 
 jobs:
   test:
@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      #- name: Install Playwright browsers
-      #  run: npx playwright install --with-deps
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
 
       - name: Create test data directory if it doesn't exist
         run: mkdir -p testdata
