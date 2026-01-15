@@ -1,29 +1,76 @@
-name: Playwright Tests
+name: Playwright E2E Tests
+
 on:
   push:
-    branches: [main]
+    branches: [ main, master ]
   pull_request:
-    branches: [main]
-jobs: 
+    branches: [ main, master ]
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
   test:
-    timeout-minutes: 60
-    runs-on: windows-latest
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
 
-    
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    
-    - name: Install dependencies
-      run: npm ci
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
 
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Create test data directory if it doesn't exist
+        run: mkdir -p testdata
+
+      - name: Create post_request_body.json
+        run: |
+          cat > testdata/post_request_body.json << 'EOF'
+          {
+            "firstname": "Jim",
+            "lastname": "Brown",
+            "totalprice": 111,
+            "depositpaid": true,
+            "bookingdates": {
+              "checkin": "2023-01-01",
+              "checkout": "2023-01-10"
+            },
+            "additionalneeds": "Breakfast"
+          }
+          EOF
+
+      - name: Create post_token_body.json
+        run: |
+          cat > testdata/post_token_body.json << 'EOF'
+          {
+            "username": "admin",
+            "password": "password123"
+          }
+          EOF
+
+      - name: Create put_request_body.json
+        run: |
+          cat > testdata/put_request_body.json << 'EOF'
+          {
+            "firstname": "James",
+            "lastname": "Brown",
+            "totalprice": 150,
+            "depositpaid": true,
+            "bookingdates": {
+              "checkin": "2023-01-05",
+              "checkout": "2023-01-15"
+            },
+            "additionalneeds": "Breakfast and Dinner"
+          }
+          EOF
 
     - name: Run Playwright tests
       #run: npx playwright test
