@@ -29,8 +29,21 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Create test data directory if it doesn't exist
-        run: mkdir -p testdata
+      - name: Create test data directory (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          if [ ! -d "testdata" ]; then
+            mkdir -p testdata
+          fi
+        shell: bash
+
+      - name: Create test data directory (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          if (-not (Test-Path -Path "testdata" -PathType Container)) {
+            New-Item -Path "testdata" -ItemType Directory -Force
+          }
+        shell: powershell
 
       - name: Create post_request_body.json
         run: |
