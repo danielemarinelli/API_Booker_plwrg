@@ -45,7 +45,8 @@ jobs:
           }
         shell: powershell
 
-      - name: Create post_request_body.json
+      - name: Create test data files (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
           cat > testdata/post_request_body.json << 'EOF'
           {
@@ -61,8 +62,6 @@ jobs:
           }
           EOF
 
-      - name: Create post_token_body.json
-        run: |
           cat > testdata/post_token_body.json << 'EOF'
           {
             "username": "admin",
@@ -70,8 +69,6 @@ jobs:
           }
           EOF
 
-      - name: Create put_request_body.json
-        run: |
           cat > testdata/put_request_body.json << 'EOF'
           {
             "firstname": "James",
@@ -85,6 +82,49 @@ jobs:
             "additionalneeds": "Breakfast and Dinner"
           }
           EOF
+        shell: bash
+
+      - name: Create test data files (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $postRequestBody = @"
+          {
+            "firstname": "Jim",
+            "lastname": "Brown",
+            "totalprice": 111,
+            "depositpaid": true,
+            "bookingdates": {
+              "checkin": "2023-01-01",
+              "checkout": "2023-01-10"
+            },
+            "additionalneeds": "Breakfast"
+          }
+          "@
+          Set-Content -Path "testdata/post_request_body.json" -Value $postRequestBody
+
+          $postTokenBody = @"
+          {
+            "username": "admin",
+            "password": "password123"
+          }
+          "@
+          Set-Content -Path "testdata/post_token_body.json" -Value $postTokenBody
+
+          $putRequestBody = @"
+          {
+            "firstname": "James",
+            "lastname": "Brown",
+            "totalprice": 150,
+            "depositpaid": true,
+            "bookingdates": {
+              "checkin": "2023-01-05",
+              "checkout": "2023-01-15"
+            },
+            "additionalneeds": "Breakfast and Dinner"
+          }
+          "@
+          Set-Content -Path "testdata/put_request_body.json" -Value $putRequestBody
+        shell: powershell
 
       - name: Run Playwright tests
       #run: npx playwright test
