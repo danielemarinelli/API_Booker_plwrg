@@ -1,0 +1,11 @@
+{
+        "firstname": "James",
+        "lastname": "Bond",
+        "totalprice": 1007,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2025-12-12",
+            "checkout": "2025-12-31"
+        },
+        "additionalneeds": "Super Sugar"
+}
