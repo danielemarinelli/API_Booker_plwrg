@@ -82,6 +82,43 @@ jobs:
             "additionalneeds": "Breakfast and Dinner"
           }
           EOF
+
+          cat > testdata/patch_request_body.json << 'EOF'
+          {
+            "firstname": "Tom",
+            "depositpaid": false,
+            "bookingdates": {
+              "checkin": "2025-12-24",
+              "checkout": "2026-01-31"
+            }
+          }
+          EOF
+
+          cat > testdata/JSON_Schema.json << 'EOF'
+          {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "number"
+              },
+              "id": {
+                "type": "number"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "userId",
+              "id",
+              "title",
+              "body"
+            ]
+          }
+          EOF
         shell: bash
 
       - name: Create test data files (Windows)
@@ -124,12 +161,52 @@ jobs:
           }
           "@
           Set-Content -Path "testdata/put_request_body.json" -Value $putRequestBody
-        shell: powershell
+        
+          $patchRequestBody = @"
+          {
+            "firstname": "Tom",
+            "depositpaid": false,
+            "bookingdates": {
+              "checkin": "2025-12-24",
+              "checkout": "2026-01-31"
+            }
+          }
+          "@
+          Set-Content -Path "testdata/patch_request_body.json" -Value $patchRequestBody
+
+          $jsonSchema = @"
+          {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "number"
+              },
+              "id": {
+                "type": "number"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "userId",
+              "id",
+              "title",
+              "body"
+            ]
+          }
+          "@
+          Set-Content -Path "testdata/JSON_Schema.json" -Value $jsonSchema
+
+        shell: powershell          
 
       - name: Run Playwright tests
       #run: npx playwright test
       #run: npx playwright test --grep "@post"
-        run: npm run e2e
+        run: npm run patch
     
       - name: Upload Playwright HTML Report
         if: always()
