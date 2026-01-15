@@ -18,7 +18,7 @@ test("Create POST request using JSON FILE body @POST", async ({request}) =>{
     // send POST request from json file
     //const response = await request.post("https://restful-booker.herokuapp.com/booking",{data:body}); 
     //instead of writting the BaseURL in every test, we can specify it on the playwright.config.ts file (line 29) and in the request specify only the endpoint
-    const response = await request.post("/booking",{data:jsonBody, ignoreHTTPSErrors: true});
+    const response = await request.post("/booking",{data:jsonBody});
     
     //extract the body response to validate the fields
     const responseBody = await response.json();

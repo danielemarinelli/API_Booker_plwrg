@@ -43,8 +43,7 @@ test("Update Booking (PUT) @PUT", async ({request}) =>{
     const updatedResponse=await request.put(`/booking/${bookingid}`,
         {
             headers:{"Cookie":`token=${tokenGenerated}`},
-            data:putRequestBodyFromFile,
-            ignoreHTTPSErrors: true
+            data:putRequestBodyFromFile
         });
     console.log("======<<<<<>>>>>>=========")    
     console.log(await updatedResponse.json());

@@ -25,10 +25,9 @@ test("Get booking details by Full Name as query parameter", async ({request}) =>
     const lastname = "Bond";
     // GET Request with firstname and lastname passed as QUERY PARAMETERS
     const response = await request.get("/booking", {
-        ignoreHTTPSErrors: true, 
-        params:{
-            firstname,
-            lastname}
+            params:{
+                firstname,
+                lastname}
         }
     );
 
