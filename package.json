@@ -1,0 +1,29 @@
+{
+  "name": "api_booker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  "post": "playwright test --grep @POST",
+  "get": "playwright test --grep @GET",
+  "put": "playwright test --grep @PUT",
+  "patch": "playwright test --grep @PATCH",
+  "e2e": "playwright test --grep @E2E",
+  "auth": "playwright test --grep @AUTH",
+  "schema": "playwright test --grep @SCHEMA"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.3",
+    "ajv": "^8.17.1",
+    "allure-playwright": "^3.4.4",
+    "playwright": "^1.57.0"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "luxon": "^3.7.2"
+  }
+}
